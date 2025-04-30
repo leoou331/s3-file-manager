@@ -1,0 +1,4 @@
+flask==2.2.3
+boto3==1.26.135
+Werkzeug==2.2.3
+gunicorn==21.2.0

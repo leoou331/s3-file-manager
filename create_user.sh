@@ -1,0 +1,1 @@
+aws secretsmanager update-secret --secret-id $SECRET_NAME --secret-string '{"admin":"admin123", "user1":"user123"}' 

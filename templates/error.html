@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="alert alert-danger">
+    <h4 class="alert-heading">错误</h4>
+    <p>{{ error }}</p>
+</div>
+<a href="{{ url_for('files') }}" class="btn btn-primary">返回文件列表</a>
+{% endblock %} 

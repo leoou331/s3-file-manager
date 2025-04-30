@@ -1,0 +1,26 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret"
+            ],
+            "Resource": "arn:aws-cn:secretsmanager:cn-northwest-1:104946057020:secret:s3-file-manager-user*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:PutObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws-cn:s3:::s3-file-manager-bucket",
+                "arn:aws-cn:s3:::s3-file-manager-bucket/*"
+            ]
+        }
+    ]
+}

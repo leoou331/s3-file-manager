@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: s3-manager-config
+data:
+  AWS_REGION: "cn-northwest-1"                # 替换为实际的 AWS 区域
+  S3_BUCKET_NAME: "s3-file-manager-bucket"    # 替换为实际的 S3 桶名
+  SECRET_NAME: "s3-file-manager-user"         # 替换为实际的 Secret Manager 密钥名
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s3-file-manager
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: s3-file-manager
+  template:
+    metadata:
+      labels:
+        app: s3-file-manager
+    spec:
+      containers:
+      - name: s3-file-manager
+        image: 104946057020.dkr.ecr.cn-northwest-1.amazonaws.com.cn/s3-file-manager:latest
+        imagePullPolicy: Always                # 确保每次都拉取最新镜像
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: s3-manager-config
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: s3-file-manager-service
+spec:
+  selector:
+    app: s3-file-manager
+  ports:
+  - port: 80
+    targetPort: 5000
+  type: LoadBalancer

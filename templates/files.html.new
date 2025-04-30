@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>文件列表</h2>
+    <div>
+        <button id="upload-btn" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#uploadModal">
+            <i class="bi bi-cloud-upload"></i> 上传文件
+        </button>
+        <button id="download-btn" class="btn btn-primary" disabled>下载所选文件</button>
+    </div>
+</div>
+
+<!-- 上传文件模态框 -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel">上传文件</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="upload-form" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="file" class="form-label">选择文件</label>
+                        <input type="file" class="form-control" id="file" name="file" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="directory" class="form-label">目录路径 (可选)</label>
+                        <input type="text" class="form-control" id="directory" name="directory" placeholder="例如: folder/subfolder">
+                    </div>
+                </form>
+                <div id="upload-progress" class="progress d-none mt-3">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div id="upload-alert" class="alert mt-3 d-none"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="upload-submit">上传</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 现有的文件列表卡片... -->
+<div class="card mb-4">
+    <!-- 保留原有的文件列表代码... -->
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 文件上传功能
+    const uploadForm = document.getElementById('upload-form');
+    const uploadSubmit = document.getElementById('upload-submit');
+    const uploadProgress = document.getElementById('upload-progress');
+    const progressBar = uploadProgress.querySelector('.progress-bar');
+    const uploadAlert = document.getElementById('upload-alert');
+    
+    uploadSubmit.addEventListener('click', function() {
+        const fileInput = document.getElementById('file');
+        if (!fileInput.files[0]) {
+            showUploadAlert('请选择文件', 'danger');
+            return;
+        }
+        
+        const formData = new FormData(uploadForm);
+        
+        // 显示进度条
+        uploadProgress.classList.remove('d-none');
+        progressBar.style.width = '0%';
+        progressBar.setAttribute('aria-valuenow', 0);
+        uploadAlert.classList.add('d-none');
+        
+        // 禁用上传按钮
+        uploadSubmit.disabled = true;
+        
+        fetch('{{ url_for("upload") }}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || '上传失败');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            // 上传完成
+            progressBar.style.width = '100%';
+            progressBar.setAttribute('aria-valuenow', 100);
+            
+            // 显示成功消息
+            showUploadAlert(data.message, 'success');
+            
+            // 重置表单
+            uploadForm.reset();
+            
+            // 2秒后关闭模态框并刷新页面
+            setTimeout(() => {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('uploadModal'));
+                modal.hide();
+                window.location.href = data.file.url;
+            }, 1500);
+        })
+        .catch(error => {
+            // 显示错误消息
+            showUploadAlert(error.message, 'danger');
+        })
+        .finally(() => {
+            // 启用上传按钮
+            uploadSubmit.disabled = false;
+        });
+    });
+    
+    function showUploadAlert(message, type) {
+        uploadAlert.textContent = message;
+        uploadAlert.className = `alert mt-3 alert-${type}`;
+        uploadAlert.classList.remove('d-none');
+    }
+    
+    // 上传进度模拟
+    uploadSubmit.addEventListener('click', function() {
+        if (!document.getElementById('file').files[0]) return;
+        
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 5;
+            if (progress <= 90) {
+                progressBar.style.width = `${progress}%`;
+                progressBar.setAttribute('aria-valuenow', progress);
+            } else {
+                clearInterval(interval);
+            }
+        }, 100);
+    });
+
+    // 保留原有的代码...
+});
+</script>
+{% endblock %} 

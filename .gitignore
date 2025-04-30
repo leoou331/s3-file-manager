@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Docker
+.docker/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.tmp
+*.bak
+eks_cluster_init.sh
+cleanup_and_create_eks.sh
+install_kubectl.sh
