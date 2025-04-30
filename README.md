@@ -201,3 +201,16 @@ kubectl logs -l app=s3-file-manager
 - 考虑在 S3 存储桶上启用加密
 - 在生产环境中，确保 `FLASK_SECRET_KEY` 是唯一且强壮的密钥
 
+
+## 许可证
+
+[MIT](LICENSE)
+
+## 联系方式
+
+项目维护者: Leo Ou
+
+---
+
+*本项目基于 MIT 许可证发布*
+
