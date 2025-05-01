@@ -1,9 +1,13 @@
 #!/bin/bash
 set -e
 
-CLUSTER_NAME="s3-file-manager-cluster"
-REGION="cn-northwest-1"
-ECR_REPO_NAME="s3-file-manager"
+# ------------------------------------------------------------
+# 重要: 使用此脚本前，请替换以下变量为您的实际值
+# ------------------------------------------------------------
+
+CLUSTER_NAME="your-cluster-name"    # 替换为您的 EKS 集群名称
+REGION="your-region"                # 替换为您的 AWS 区域，例如 cn-northwest-1
+ECR_REPO_NAME="s3-file-manager"     # ECR 存储库名称，如有不同请修改
 
 echo "=== 准备部署 S3 文件管理应用到 EKS ==="
 
@@ -25,9 +29,10 @@ kind: ConfigMap
 metadata:
   name: s3-manager-config
 data:
-  S3_BUCKET_NAME: "s3-file-manager-bucket"  # 替换为实际的 S3 桶名
-  SECRET_NAME: "s3-file-manager-user"        # 替换为实际的 Secret Manager 密钥名
-  AWS_REGION: "cn-northwest-1"              # 添加 AWS 区域
+  # 请替换以下值为您的实际配置
+  S3_BUCKET_NAME: "your-bucket-name"  # 替换为实际的 S3 桶名
+  SECRET_NAME: "your-secret-name"     # 替换为实际的 Secret Manager 密钥名
+  AWS_REGION: "${REGION}"             # 使用脚本变量中的区域
 ---
 apiVersion: apps/v1
 kind: Deployment

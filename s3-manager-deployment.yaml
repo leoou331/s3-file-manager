@@ -1,11 +1,16 @@
+# ------------------------------------------------------------
+# 重要: 在部署到 Kubernetes 前，请替换此文件中的所有占位符
+# ------------------------------------------------------------
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: s3-manager-config
 data:
-  AWS_REGION: "cn-northwest-1"                # 替换为实际的 AWS 区域
-  S3_BUCKET_NAME: "s3-file-manager-bucket"    # 替换为实际的 S3 桶名
-  SECRET_NAME: "s3-file-manager-user"         # 替换为实际的 Secret Manager 密钥名
+  # 请替换以下值为您的实际配置
+  AWS_REGION: "your-region"                # 替换为实际的 AWS 区域，例如 cn-northwest-1
+  S3_BUCKET_NAME: "your-bucket-name"       # 替换为实际的 S3 桶名
+  SECRET_NAME: "your-secret-name"          # 替换为实际的 Secret Manager 密钥名
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -23,7 +28,9 @@ spec:
     spec:
       containers:
       - name: s3-file-manager
-        image: 104946057020.dkr.ecr.cn-northwest-1.amazonaws.com.cn/s3-file-manager:latest
+        # 请替换镜像地址为您的实际 ECR 仓库地址
+        image: your-account-id.dkr.ecr.your-region.amazonaws.com.cn/s3-file-manager:latest
+        # 格式：[AWS账户ID].dkr.ecr.[区域].amazonaws.com.cn/s3-file-manager:latest
         imagePullPolicy: Always                # 确保每次都拉取最新镜像
         ports:
         - containerPort: 5000

@@ -10,14 +10,22 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 COPY templates/ templates/
 
+# ------------------------------------------------------------
+# 重要: 在生产环境中使用此镜像前，请替换以下环境变量为实际值
+# ------------------------------------------------------------
+
 # 设置环境变量 - 生产环境请通过环境变量注入或使用密钥管理服务
+# 替换为您的 AWS Secrets Manager 密钥名
 ENV SECRET_NAME="your-secret-name"
+# 替换为您的 S3 存储桶名称
 ENV S3_BUCKET_NAME="your-bucket-name"
+# 替换为您的 AWS 区域
+ENV AWS_DEFAULT_REGION="your-region"
+ENV AWS_REGION="your-region"
+
 # AWS认证信息，实际使用时建议使用IAM角色或挂载凭证文件
 # ENV AWS_ACCESS_KEY_ID="your-access-key"
 # ENV AWS_SECRET_ACCESS_KEY="your-secret-key"
-ENV AWS_DEFAULT_REGION="your-region"
-ENV AWS_REGION="your-region"
 
 # 设置 Flask 的 secret key - 生产环境请使用随机生成的密钥
 # ENV FLASK_SECRET_KEY="your-secret-key"

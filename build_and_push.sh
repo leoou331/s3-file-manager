@@ -1,8 +1,12 @@
 #!/bin/bash
 set -e
 
+# ------------------------------------------------------------
+# 重要: 使用此脚本前，请替换以下变量为您的实际值
+# ------------------------------------------------------------
+
 # 配置变量
-AWS_REGION="cn-northwest-1"  # 更改为您的 AWS 区域
+AWS_REGION="your-region"  # 替换为您的 AWS 区域，例如 cn-northwest-1
 ECR_REPOSITORY_NAME="s3-file-manager"  # ECR 存储库名称
 IMAGE_TAG="latest"      # 镜像标签
 

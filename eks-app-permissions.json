@@ -7,7 +7,7 @@
                 "secretsmanager:GetSecretValue",
                 "secretsmanager:DescribeSecret"
             ],
-            "Resource": "arn:aws-cn:secretsmanager:cn-northwest-1:104946057020:secret:s3-file-manager-user*"
+            "Resource": "arn:aws-cn:secretsmanager:your-region:your-account-id:secret:your-secret-name*"
         },
         {
             "Effect": "Allow",
@@ -18,8 +18,8 @@
                 "s3:DeleteObject"
             ],
             "Resource": [
-                "arn:aws-cn:s3:::s3-file-manager-bucket",
-                "arn:aws-cn:s3:::s3-file-manager-bucket/*"
+                "arn:aws-cn:s3:::your-bucket-name",
+                "arn:aws-cn:s3:::your-bucket-name/*"
             ]
         }
     ]
